@@ -1,12 +1,9 @@
 import '@/index.css'
-import LoginScreen from './pages/Login'
-import CadastroScreen from './pages/Cadastro'
+import Rotas from './routes'
 
 function App() {
   return (
-    <>
-      <CadastroScreen />
-    </>
+    <Rotas />
   )
 }
 
