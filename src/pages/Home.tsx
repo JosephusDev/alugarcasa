@@ -1,3 +1,3 @@
-export default function HomeScreen(){
-    return <></>
+export default function HomeScreen() {
+  return <></>
 }
