@@ -27,7 +27,7 @@ export default function LoginScreen() {
   const navigate = useNavigate()
   return (
     <div className='justify-center items-center w-screen h-screen flex'>
-      <Card className='w-[30%] bg-primary-foreground'>
+      <Card className='w-[80%] lg:w-[30%] md:w-[40%] sm:w-[60%] bg-primary-foreground'>
         <CardHeader className='flex justify-center items-center'>
           <Avatar className='w-20 h-20'>
             <AvatarImage src={imageAvatar} />

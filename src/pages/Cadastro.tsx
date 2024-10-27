@@ -36,7 +36,16 @@ export default function CadastroScreen() {
           navigate('/login')
         } else if (detalhes) {
           toast({
-            description: <div className='font-bold'>{detalhes}</div>,
+            description: (
+              <div className='font-bold'>
+                <ul>
+                  {detalhes.map((d: string) => {
+                    return <li key={d}>{d}</li>
+                  })}
+                </ul>
+              </div>
+            ),
+            variant: 'destructive',
           })
         }
       })
@@ -47,7 +56,7 @@ export default function CadastroScreen() {
 
   return (
     <div className='justify-center items-center w-screen h-screen flex'>
-      <Card className='w-[30%] bg-primary-foreground'>
+      <Card className='w-[80%] lg:w-[30%] md:w-[40%] sm:w-[60%] bg-primary-foreground'>
         <CardHeader className='flex justify-center items-center'>
           <Avatar className='w-20 h-20'>
             <AvatarImage src={ImageAvatar} />
