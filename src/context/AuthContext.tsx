@@ -1,6 +1,7 @@
 import Api from '@/api'
 import { useToast } from '@/hooks/use-toast'
 import { createContext, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface AuthType {
   login: (nome: string, senha: string) => Promise<void>
@@ -13,6 +14,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const login = async (nome: string, senha: string) => {
     if (nome && senha) {
@@ -23,6 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         localStorage.setItem('id', response.data.id)
         localStorage.setItem('nome', response.data.nome)
         localStorage.setItem('token', response.data.token)
+        navigate('/home')
       } else {
         toast({
           description: (
