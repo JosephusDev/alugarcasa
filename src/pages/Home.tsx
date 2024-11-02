@@ -1,7 +1,7 @@
-import PropriedadeComponent from "@/components/PropriedadeComponent";
+import PropriedadeComponent from '@/components/PropriedadeComponent'
 
 export default function HomeScreen() {
-  return(
+  return (
     <>
       <PropriedadeComponent />
     </>
