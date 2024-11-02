@@ -1,9 +1,9 @@
-import TabelaPropriedade from "@/components/TabelaPropriedade";
+import PropriedadeComponent from "@/components/PropriedadeComponent";
 
 export default function HomeScreen() {
   return(
     <>
-      <TabelaPropriedade />
+      <PropriedadeComponent />
     </>
   )
 }
