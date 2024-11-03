@@ -10,23 +10,23 @@ import {
 } from './ui/table'
 import { Input } from './ui/input'
 import { MeuModal } from './MeuModal'
-import { Trash } from 'lucide-react'
+import { AlertCircle, CheckCircle, Image, PlusCircle, Trash } from 'lucide-react'
 import { Label } from './ui/label'
 import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
 import { useToast } from '@/hooks/use-toast'
-import * as SelectPrimitive from '@radix-ui/react-select'
+import {formatar} from "@/shared/formatarMoeda"
 
 interface IPropriedades {
   id: number
   descricao: string
   cidade: string
   bairro: string
-  preco: string
+  preco: number
   imagem: string
 }
 
-export default function PropriedadeComponent() {
+export function PropriedadeComponent() {
   const { toast } = useToast()
 
   const [propriedades, setPropriedades] = useState<IPropriedades[]>([])
@@ -53,71 +53,98 @@ export default function PropriedadeComponent() {
     }
   }
 
+  const limparCampos = () => {
+    setDescricao("")
+    setCidade("")
+    setBairro("")
+    setPreco("")
+    setImagem("")
+  }
+
   const cadastrarPropriedade = async () => {
-    const id_usuario = localStorage.getItem('id')
-
-    const token = localStorage.getItem('token')
-    try {
-      const response = await Api.post(
-        `/propriedade`,
-        { descricao, cidade, bairro, preco, imagem, id_usuario },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
-
-      const resposta = response.data.message
+    if(descricao && cidade && bairro && preco && imagem){
+      const id_usuario = localStorage.getItem('id')
+      const token = localStorage.getItem('token')
+        await Api.post(
+          `/propriedade`,
+          { descricao, cidade, bairro, preco, imagem, id_usuario },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        )
+        .then((response)=>{
+          getPropriedades()
+          toast({
+            description: (
+              <div className='flex gap-2'>
+                <CheckCircle size={15} />
+                <h2>{response.data.message}</h2>
+              </div>
+            ),
+          })
+        })
+        .catch((error)=>{
+          console.error('Erro ao cadastrar propriedade:', error)
+          toast({
+            description: 'Erro ao cadastrar propriedade',
+            variant: "destructive"
+          })
+        })
+        .finally(()=>limparCampos())
+    }else{
       toast({
-        description: resposta,
-      })
-      getPropriedades()
-    } catch (error) {
-      console.error('Erro ao cadastrar propriedade:', error)
-      toast({
-        description: 'Erro ao cadastrar propriedade',
+        description: (
+          <div className='flex gap-2'>
+            <AlertCircle size={18} />
+            <h2>Preencha todos os campos</h2>
+          </div>
+        ),
+        variant: "destructive"
       })
     }
   }
 
   const deletePropriedade = async (id: number) => {
     const token = localStorage.getItem('token')
-    try {
-      const response = await Api.delete(`/propriedade/${id}`, {
+      Api.delete(`/propriedade/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-
-      const resposta = response.data.message
-      toast({
-        description: resposta,
+      .then((response)=>{
+        setPropriedades((prevState) => prevState.filter((prop) => prop.id !== id))
+        toast({
+          description: (
+            <div className='flex gap-2'>
+              <CheckCircle size={15} />
+              <h2>{response.data.message}</h2>
+            </div>
+          ),
+        })
       })
-
-      setPropriedades((prevState) => prevState.filter((prop) => prop.id !== id))
-    } catch (error) {
-      console.error('Erro ao excluir propriedade:', error)
-      toast({
-        description: 'Erro ao excluir propriedade',
+      .catch((error) => {
+        console.error('Erro ao excluir propriedade:', error)
+        toast({
+          description: 'Erro ao excluir propriedade',
+        })
       })
-    }
   }
 
   useEffect(() => {
     getPropriedades()
   }, [])
 
-  const filteredPropriedades = search
+  const filteredPropriedades = search && propriedades.length > 0
     ? propriedades?.filter((p) =>
         p.descricao.toLowerCase().includes(search.toLowerCase()),
       )
     : propriedades
 
   return (
-    <div className='m-4 p-4 gap-4'>
-      <div className='gap-4 m-4 p-4'>
+      <div className='gap-4 px-4 w-full'>
         <div className='my-5'>
-          <h1 className='text-3xl font-bold'>Gerencie suas propriedades</h1>
+          <h1 className='text-xl sm:text-3xl font-bold'>Gerencie suas propriedades</h1>
         </div>
         <div className='flex justify-between items-center gap-4'>
-          <div>
+          <div className='w-full sm:w-auto'>
             <Input
               onChange={(e) => setSearch(e.target.value)}
               type='text'
@@ -126,7 +153,13 @@ export default function PropriedadeComponent() {
           </div>
           <div>
             <MeuModal
+              title='Adicionar Propriedade'
               buttonTitle='Adicionar'
+              trigger={
+                <Button className='gap-2'>
+                  <PlusCircle size={15} /> <span className='hidden sm:flex'>Adicionar</span>
+                </Button>
+              }
               children={
                 <>
                   <div className='grid grid-rows-1 gap-1'>
@@ -194,17 +227,34 @@ export default function PropriedadeComponent() {
                 filteredPropriedades.map((prop, index) => (
                   <TableRow key={prop.id}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{prop.descricao}</TableCell>
-                    <TableCell>{prop.cidade}</TableCell>
-                    <TableCell>{prop.bairro}</TableCell>
-                    <TableCell>{prop.preco}</TableCell>
-                    <TableCell>{prop.imagem}</TableCell>
+                    <TableCell className='whitespace-nowrap'>{prop.descricao}</TableCell>
+                    <TableCell className='whitespace-nowrap'>{prop.cidade}</TableCell>
+                    <TableCell className='whitespace-nowrap'>{prop.bairro}</TableCell>
+                    <TableCell className='whitespace-nowrap'>{formatar(prop.preco)}</TableCell>
+                    <TableCell className='whitespace-nowrap'>
+                      <MeuModal
+                        visibleFooter={false}
+                        title='Imagem da casa'
+                        trigger={
+                          <Button variant={'ghost'}>
+                            <Image size={15}/>
+                          </Button>
+                        }
+                        children={
+                          <img
+                            src={prop.imagem}
+                            alt={prop.descricao}
+                            className='w-full'
+                          />
+                        }
+                      />
+                    </TableCell>
                     <TableCell>
                       <Button
-                        variant={'outline'}
+                        variant={'ghost'}
                         onClick={() => deletePropriedade(prop.id)}
                       >
-                        <Trash />
+                        <Trash size={15} />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -212,7 +262,7 @@ export default function PropriedadeComponent() {
               ) : (
                 <TableRow>
                   <TableCell className='text-center py-5 font-bold' colSpan={7}>
-                    <h1 className='text-lg'>Nenhuma propriedade encontrada</h1>
+                    <h1 className='text-sm sm:text-lg'>Nenhuma propriedade encontrada</h1>
                   </TableCell>
                 </TableRow>
               )}
@@ -220,6 +270,5 @@ export default function PropriedadeComponent() {
           </Table>
         </div>
       </div>
-    </div>
   )
 }

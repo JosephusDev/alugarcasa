@@ -7,38 +7,44 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { PlusCircle } from 'lucide-react'
+import React from 'react'
 
 interface ModalProps {
   children: React.ReactNode
-  title?: string
+  title: string
   buttonTitle?: string
+  trigger: React.ReactNode
   onClick?: () => void
+  visibleFooter?: boolean
 }
 
 export function MeuModal({
   children,
-  title = 'Adicionar Propriedade',
-  buttonTitle = 'Cadastrar',
+  title,
+  buttonTitle,
   onClick,
+  trigger,
+  visibleFooter = true,
 }: ModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='gap-2'>
-          <PlusCircle size={15} /> Adicionar
-        </Button>
+        {trigger}
       </DialogTrigger>
       <DialogContent className='sm:max-w-[60%px]'>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <div className='grid gap-4 py-4'>{children}</div>
-        <DialogFooter>
-          <Button onClick={onClick} type='submit'>
-            {buttonTitle}
-          </Button>
-        </DialogFooter>
+        {
+          visibleFooter && (
+            <DialogFooter>
+              <Button onClick={onClick} type='submit'>
+                {buttonTitle}
+              </Button>
+            </DialogFooter>
+          )
+        }
       </DialogContent>
     </Dialog>
   )

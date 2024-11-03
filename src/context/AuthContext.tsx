@@ -14,7 +14,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { toast } = useToast()
-  const navigate = useNavigate()
 
   const login = async (nome: string, senha: string) => {
     if (nome && senha) {
@@ -25,12 +24,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         localStorage.setItem('id', response.data.id)
         localStorage.setItem('nome', response.data.nome)
         localStorage.setItem('token', response.data.token)
-        navigate('/home')
       } else {
         toast({
-          description: (
-            <div className='font-bold'>Utilizador não encontrado!</div>
-          ),
+          description: <div className='font-bold'>Utilizador não encontrado!</div>,
+          variant: "destructive"
         })
       }
     } else {
