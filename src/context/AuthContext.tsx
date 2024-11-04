@@ -1,11 +1,12 @@
 import Api from '@/api'
 import { useToast } from '@/hooks/use-toast'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface AuthType {
   login: (nome: string, senha: string) => Promise<void>
   logout: () => void
+  isAuthenticated: boolean
 }
 
 const AuthContext = createContext<AuthType | undefined>(undefined)
@@ -14,20 +15,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { toast } = useToast()
+  const navigate = useNavigate()
+  const token = localStorage.getItem('token')
+  const [isAuthenticated, setIsAuthenticated] = useState(token ? true : false)
 
   const login = async (nome: string, senha: string) => {
     if (nome && senha) {
       const response = await Api.post('/usuario/login', { nome, senha })
 
       if (response.data.token) {
-        localStorage.setItem('autenticado', 'true')
+        setIsAuthenticated(true)
         localStorage.setItem('id', response.data.id)
         localStorage.setItem('nome', response.data.nome)
         localStorage.setItem('token', response.data.token)
+        navigate('/home')
       } else {
         toast({
-          description: <div className='font-bold'>Utilizador não encontrado!</div>,
-          variant: "destructive"
+          description: (
+            <div className='font-bold'>Utilizador não encontrado!</div>
+          ),
+          variant: 'destructive',
         })
       }
     } else {
@@ -38,14 +45,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   const logout = () => {
-    localStorage.removeItem('autenticado')
+    setIsAuthenticated(false)
     localStorage.removeItem('id')
     localStorage.removeItem('nome')
     localStorage.removeItem('token')
+    navigate('/login')
   }
 
   return (
-    <AuthContext.Provider value={{ login, logout }}>
+    <AuthContext.Provider value={{ login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   )

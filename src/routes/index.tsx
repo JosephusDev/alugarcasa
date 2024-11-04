@@ -5,31 +5,40 @@ import CadastroScreen from '@/pages/Cadastro'
 import { PropriedadeComponent } from '@/components/PropriedadeComponent'
 import { HomeComponent } from '@/components/HomeComponent'
 import { PerfilComponent } from '@/components/PerfilComponent'
+import { useAuth } from '@/context/AuthContext'
 
 export default function Rotas() {
-  const token = localStorage.getItem("token")
-
-  console.log("token: " + token)
-
-  const RoutesAuth = (
+  const { isAuthenticated } = useAuth()
+  return (
     <Routes>
-      <Route path='/home' element={<HomeComponent />} />
-      <Route path='/propriedades' element={<PropriedadeComponent />} />
-      <Route path='/perfil' element={<PerfilComponent />} />
-      <Route path='*' element={<Navigate to='/home' />} />
-    </Routes>
-  )
-
-  const RoutesPublic = (
-    <Routes>
+      <Route
+        path='/home'
+        element={
+          isAuthenticated ? <HomeComponent /> : <Navigate to={'/login'} />
+        }
+      />
+      <Route
+        path='/propriedades'
+        element={
+          isAuthenticated ? (
+            <PropriedadeComponent />
+          ) : (
+            <Navigate to={'/login'} />
+          )
+        }
+      />
+      <Route
+        path='/perfil'
+        element={
+          isAuthenticated ? <PerfilComponent /> : <Navigate to={'/login'} />
+        }
+      />
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/cadastro' element={<CadastroScreen />} />
-      <Route path='*' element={<Navigate to='/login' />} />
+      <Route
+        path='*'
+        element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
+      />
     </Routes>
   )
-
-  const ComponentReturn = token && token.length > 0 ? RoutesAuth : RoutesPublic
-
-  return ComponentReturn
-  
 }

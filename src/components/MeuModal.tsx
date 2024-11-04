@@ -28,23 +28,19 @@ export function MeuModal({
 }: ModalProps) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        {trigger}
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className='sm:max-w-[60%px]'>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <div className='grid gap-4 py-4'>{children}</div>
-        {
-          visibleFooter && (
-            <DialogFooter>
-              <Button onClick={onClick} type='submit'>
-                {buttonTitle}
-              </Button>
-            </DialogFooter>
-          )
-        }
+        {visibleFooter && (
+          <DialogFooter>
+            <Button onClick={onClick} type='submit'>
+              {buttonTitle}
+            </Button>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   )
