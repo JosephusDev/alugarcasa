@@ -4,7 +4,6 @@ import LoginScreen from '@/pages/Login'
 import CadastroScreen from '@/pages/Cadastro'
 import { PropriedadeComponent } from '@/components/PropriedadeComponent'
 import { HomeComponent } from '@/components/HomeComponent'
-import { PerfilComponent } from '@/components/PerfilComponent'
 import { useAuth } from '@/context/AuthContext'
 
 export default function Rotas() {
@@ -25,12 +24,6 @@ export default function Rotas() {
           ) : (
             <Navigate to={'/login'} />
           )
-        }
-      />
-      <Route
-        path='/perfil'
-        element={
-          isAuthenticated ? <PerfilComponent /> : <Navigate to={'/login'} />
         }
       />
       <Route path='/login' element={<LoginScreen />} />

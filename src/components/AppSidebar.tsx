@@ -1,4 +1,4 @@
-import { Home, Inbox, LogOut, User } from 'lucide-react'
+import { Home, Inbox, LogOut, Moon, Sun } from 'lucide-react'
 
 import {
   Sidebar,
@@ -13,6 +13,9 @@ import {
 } from '@/components/ui/sidebar'
 import { Button } from './ui/button'
 import { useAuth } from '@/context/AuthContext'
+import { useTheme } from './theme-providor'
+import { useState } from 'react'
+import { PerfilComponent } from './PerfilComponent'
 
 // Menu items.
 const items = [
@@ -30,8 +33,20 @@ const items = [
 
 export function AppSidebar() {
   const { logout } = useAuth()
+  const { setTheme } = useTheme()
+  const [tema, setTema] = useState('light')
 
-  const nome = localStorage.getItem('nome')
+  const alterarTema = () => {
+    if (tema === 'light') {
+      setTema('dark')
+      setTheme('dark')
+    } else {
+      setTema('light')
+      setTheme('light')
+    }
+    console.log(tema)
+  }
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -55,13 +70,20 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem key='perfil'>
+          <SidebarMenuItem key='theme'>
             <SidebarMenuButton asChild>
-              <a href='/perfil'>
-                <User />
-                <span>{nome}</span>
-              </a>
+              <Button
+                className='justify-start'
+                onClick={alterarTema}
+                variant={'ghost'}
+              >
+                {tema === 'light' ? <Moon /> : <Sun />}
+                <span>Alternar Tema</span>
+              </Button>
             </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem key='perfil'>
+            <PerfilComponent />
           </SidebarMenuItem>
           <SidebarMenuItem key='logout'>
             <SidebarMenuButton asChild>
