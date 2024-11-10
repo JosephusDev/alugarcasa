@@ -16,6 +16,7 @@ interface ModalProps {
   trigger: React.ReactNode
   onClick?: () => void
   visibleFooter?: boolean
+  typeButton?: 'default' | 'destructive'
 }
 
 export function MeuModal({
@@ -25,6 +26,7 @@ export function MeuModal({
   onClick,
   trigger,
   visibleFooter = true,
+  typeButton = 'default',
 }: ModalProps) {
   return (
     <Dialog>
@@ -36,7 +38,7 @@ export function MeuModal({
         <div className='grid gap-4 py-4'>{children}</div>
         {visibleFooter && (
           <DialogFooter>
-            <Button onClick={onClick} type='submit'>
+            <Button onClick={onClick} type='submit' variant={typeButton}>
               {buttonTitle}
             </Button>
           </DialogFooter>

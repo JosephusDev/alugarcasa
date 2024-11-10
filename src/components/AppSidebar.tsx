@@ -13,8 +13,7 @@ import {
 } from '@/components/ui/sidebar'
 import { Button } from './ui/button'
 import { useAuth } from '@/context/AuthContext'
-import { useTheme } from './theme-providor'
-import { useState } from 'react'
+import { useTheme } from '@/context/ThemeContext'
 import { PerfilComponent } from './PerfilComponent'
 
 // Menu items.
@@ -33,18 +32,14 @@ const items = [
 
 export function AppSidebar() {
   const { logout } = useAuth()
-  const { setTheme } = useTheme()
-  const [tema, setTema] = useState('light')
+  const { theme, setTheme } = useTheme()
 
   const alterarTema = () => {
-    if (tema === 'light') {
-      setTema('dark')
+    if (theme === 'light') {
       setTheme('dark')
     } else {
-      setTema('light')
       setTheme('light')
     }
-    console.log(tema)
   }
 
   return (
@@ -77,7 +72,7 @@ export function AppSidebar() {
                 onClick={alterarTema}
                 variant={'ghost'}
               >
-                {tema === 'light' ? <Moon /> : <Sun />}
+                {theme === 'light' ? <Moon /> : <Sun />}
                 <span>Alternar Tema</span>
               </Button>
             </SidebarMenuButton>

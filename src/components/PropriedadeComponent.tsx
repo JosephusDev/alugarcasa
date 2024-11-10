@@ -112,7 +112,7 @@ export function PropriedadeComponent() {
 
   const deletePropriedade = async (id: number) => {
     const token = localStorage.getItem('token')
-    Api.delete(`/propriedade/${id}`, {
+    await Api.delete(`/propriedade/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => {
@@ -142,8 +142,10 @@ export function PropriedadeComponent() {
 
   const filteredPropriedades =
     search && propriedades.length > 0
-      ? propriedades?.filter((p) =>
-          p.descricao.toLowerCase().includes(search.toLowerCase()),
+      ? propriedades?.filter(
+          (p) =>
+            p.descricao.toLowerCase().includes(search.toLowerCase()) ||
+            p.bairro.toLowerCase().includes(search.toLowerCase()),
         )
       : propriedades
 
@@ -275,12 +277,23 @@ export function PropriedadeComponent() {
                     />
                   </TableCell>
                   <TableCell>
-                    <Button
-                      variant={'ghost'}
+                    <MeuModal
+                      title='Aviso'
+                      trigger={
+                        <Button variant={'ghost'}>
+                          <Trash size={15} />
+                        </Button>
+                      }
+                      buttonTitle='Confirmar'
                       onClick={() => deletePropriedade(prop.id)}
-                    >
-                      <Trash size={15} />
-                    </Button>
+                      visibleFooter={true}
+                      children={
+                        <p className='font-bold text-center text-lg'>
+                          Deseja realmente eliminar?
+                        </p>
+                      }
+                      typeButton='destructive'
+                    />
                   </TableCell>
                 </TableRow>
               ))

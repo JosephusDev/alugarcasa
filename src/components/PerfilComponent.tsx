@@ -4,7 +4,7 @@ import { Button } from './ui/button'
 import { SidebarMenuButton } from './ui/sidebar'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
-import { toast, useToast } from '@/hooks/use-toast'
+import { toast } from '@/hooks/use-toast'
 import { useState } from 'react'
 import Api from '@/api'
 
@@ -15,25 +15,36 @@ export function PerfilComponent() {
 
   const editarPerfil = async () => {
     const id_usuario = localStorage.getItem('id')
-    const token = localStorage.getItem('token')
-
-    try {
-      const response = await Api.put(
-        `/usuario/editar/${id_usuario}`,
-        { nome, senha },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
-      toast({
-        description: 'Perfil atualizado com sucesso',
+    await Api.put(`/usuario/${id_usuario}`, { nome, senha })
+      .then((response) => {
+        const message = response?.data.message
+        const detalhes = response?.data.detalhes
+        if (message) {
+          toast({
+            description: message,
+          })
+        } else if (detalhes) {
+          toast({
+            description: (
+              <div className='font-bold'>
+                <ul>
+                  {detalhes.map((d: string) => {
+                    return <li key={d}>{d}</li>
+                  })}
+                </ul>
+              </div>
+            ),
+            variant: 'destructive',
+          })
+        }
       })
-    } catch (error) {
-      toast({
-        description: 'Erro ao editar perfil',
-        variant: 'destructive',
+      .catch((error) => {
+        console.error(error)
+        toast({
+          description: 'Erro ao editar perfil',
+          variant: 'destructive',
+        })
       })
-    }
   }
   //
   return (
@@ -48,11 +59,11 @@ export function PerfilComponent() {
             </Button>
           </SidebarMenuButton>
         }
-        buttonTitle='Editar'
+        buttonTitle='Salvar'
         children={
           <>
             <div className='grid grid-rows-1 gap-1'>
-              <Label htmlFor='nome'>Nome de Usuário</Label>
+              <Label htmlFor='nome'>Nome do Utilizador</Label>
               <Input
                 id='nome'
                 value={nome}
@@ -61,7 +72,7 @@ export function PerfilComponent() {
               />
             </div>
             <div className='grid grid-rows-1 gap-1'>
-              <Label htmlFor='senha'>Senha</Label>
+              <Label htmlFor='senha'>Palavra-passe</Label>
               <Input
                 id='senha'
                 type='password'

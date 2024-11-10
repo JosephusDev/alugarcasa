@@ -1,6 +1,6 @@
 import '@/index.css'
 import MainScreen from './pages/MainScreen'
-import { ThemeProvider } from '@/components/theme-providor'
+import { ThemeProvider } from '@/context/ThemeContext'
 
 function App() {
   return (
