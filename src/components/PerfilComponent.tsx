@@ -10,7 +10,7 @@ import Api from '@/api'
 import { useAuth } from '@/context/AuthContext'
 
 export function PerfilComponent() {
-  const {logout} = useAuth() 
+  const { logout } = useAuth()
   const nomeIncial = localStorage.getItem('nome')
   const contatoInicial = localStorage.getItem('contato')
 
@@ -18,48 +18,46 @@ export function PerfilComponent() {
   const [contato, setContato] = useState(contatoInicial || '')
   const [senha, setSenha] = useState('')
 
-
   const editarPerfil = async () => {
     const id_usuario = localStorage.getItem('id')
-    if(nome.trim() && contato.trim()){
-      await Api.put(`/usuario/${id_usuario}`, { nome, contato,senha })
-      .then((response) => {
-        const message = response?.data.message
-        const detalhes = response?.data.detalhes
-        if (message) {
+    if (nome.trim() && contato.trim()) {
+      await Api.put(`/usuario/${id_usuario}`, { nome, contato, senha })
+        .then((response) => {
+          const message = response?.data.message
+          const detalhes = response?.data.detalhes
+          if (message) {
+            toast({
+              description: message,
+            })
+            logout()
+          } else if (detalhes) {
+            toast({
+              description: (
+                <div className='font-bold'>
+                  <ul>
+                    {detalhes.map((d: string) => {
+                      return <li key={d}>{d}</li>
+                    })}
+                  </ul>
+                </div>
+              ),
+              variant: 'destructive',
+            })
+          }
+        })
+        .catch((error) => {
+          console.error(error)
           toast({
-            description: message,
-          })
-          logout()
-        } else if (detalhes) {
-          toast({
-            description: (
-              <div className='font-bold'>
-                <ul>
-                  {detalhes.map((d: string) => {
-                    return <li key={d}>{d}</li>
-                  })}
-                </ul>
-              </div>
-            ),
+            description: 'Erro ao editar perfil',
             variant: 'destructive',
           })
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-        toast({
-          description: 'Erro ao editar perfil',
-          variant: 'destructive',
         })
-      })
-    }else{
+    } else {
       toast({
         description: 'Preencha o Nome e Contato!',
         variant: 'destructive',
       })
     }
-    
   }
   //
   return (
