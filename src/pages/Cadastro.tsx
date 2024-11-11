@@ -20,8 +20,9 @@ export default function CadastroScreen() {
   const { toast } = useToast()
   const [nome, setNome] = useState('')
   const [senha, setSenha] = useState('')
+  const [contato, setContato] = useState('')
   const Cadastrar = async () => {
-    await Api.post('/usuario', { nome, senha })
+    await Api.post('/usuario', { nome, contato, senha })
       .then((response) => {
         const sucesso = response?.data.message
         const detalhes = response?.data.detalhes
@@ -71,6 +72,15 @@ export default function CadastroScreen() {
             type='text'
             id='nome'
             placeholder='Utilizador'
+            className='my-3'
+          />
+
+          <Label htmlFor='contato'>Contato</Label>
+          <Input
+            onChange={(e) => setContato(e.target.value)}
+            type='text'
+            id='contato'
+            placeholder='Contato'
             className='my-3'
           />
 
