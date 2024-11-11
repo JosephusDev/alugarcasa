@@ -288,7 +288,7 @@ export function PropriedadeComponent() {
                       onClick={() => deletePropriedade(prop.id)}
                       visibleFooter={true}
                       children={
-                        <p className='font-bold text-center text-lg'>
+                        <p className='text-center text-lg'>
                           Deseja realmente eliminar?
                         </p>
                       }
