@@ -7,8 +7,10 @@ import { Input } from './ui/input'
 import { toast } from '@/hooks/use-toast'
 import { useState } from 'react'
 import Api from '@/api'
+import { useAuth } from '@/context/AuthContext'
 
 export function PerfilComponent() {
+  const {logout} = useAuth()
   const nomeIncial = localStorage.getItem('nome')
   const [nome, setNome] = useState(nomeIncial || '')
   const [senha, setSenha] = useState('')
@@ -23,6 +25,7 @@ export function PerfilComponent() {
           toast({
             description: message,
           })
+          logout()
         } else if (detalhes) {
           toast({
             description: (
@@ -55,7 +58,7 @@ export function PerfilComponent() {
           <SidebarMenuButton asChild>
             <Button className='justify-start' variant={'ghost'}>
               <User />
-              <span>{nome}</span>
+              <span>{nomeIncial}</span>
             </Button>
           </SidebarMenuButton>
         }
