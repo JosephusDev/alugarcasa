@@ -10,7 +10,7 @@ import Api from '@/api'
 import { useAuth } from '@/context/AuthContext'
 
 export function PerfilComponent() {
-  const {logout} = useAuth()
+  const {logout} = useAuth() 
   const nomeIncial = localStorage.getItem('nome')
   const [nome, setNome] = useState(nomeIncial || '')
   const [senha, setSenha] = useState('')
