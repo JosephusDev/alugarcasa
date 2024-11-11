@@ -21,7 +21,7 @@ import { Label } from './ui/label'
 import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
 import { useToast } from '@/hooks/use-toast'
-import { formatar } from '@/shared/formatarMoeda'
+import { formatar } from '@/functions/formatarMoeda'
 
 interface IPropriedades {
   id: number
