@@ -12,12 +12,17 @@ import { useAuth } from '@/context/AuthContext'
 export function PerfilComponent() {
   const {logout} = useAuth() 
   const nomeIncial = localStorage.getItem('nome')
+  const contatoInicial = localStorage.getItem('contato')
+
   const [nome, setNome] = useState(nomeIncial || '')
+  const [contato, setContato] = useState(contatoInicial || '')
   const [senha, setSenha] = useState('')
+
 
   const editarPerfil = async () => {
     const id_usuario = localStorage.getItem('id')
-    await Api.put(`/usuario/${id_usuario}`, { nome, senha })
+    if(nome.trim() && contato.trim()){
+      await Api.put(`/usuario/${id_usuario}`, { nome, contato,senha })
       .then((response) => {
         const message = response?.data.message
         const detalhes = response?.data.detalhes
@@ -48,6 +53,13 @@ export function PerfilComponent() {
           variant: 'destructive',
         })
       })
+    }else{
+      toast({
+        description: 'Preencha o Nome e Contato!',
+        variant: 'destructive',
+      })
+    }
+    
   }
   //
   return (
@@ -71,6 +83,15 @@ export function PerfilComponent() {
                 id='nome'
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
+                className='col-span-3'
+              />
+            </div>
+            <div className='grid grid-rows-1 gap-1'>
+              <Label htmlFor='contato'>Contato do Utilizador</Label>
+              <Input
+                id='contato'
+                value={contato}
+                onChange={(e) => setContato(e.target.value)}
                 className='col-span-3'
               />
             </div>

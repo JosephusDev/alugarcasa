@@ -27,6 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsAuthenticated(true)
         localStorage.setItem('id', response.data.id)
         localStorage.setItem('nome', response.data.nome)
+        localStorage.setItem('contato', response.data.contato)
         localStorage.setItem('token', response.data.token)
         navigate('/home')
       } else {
