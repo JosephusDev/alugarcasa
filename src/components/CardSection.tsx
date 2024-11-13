@@ -19,7 +19,7 @@ interface CardSectionProps {
 
 export function CardSection({ propriedades }: CardSectionProps) {
   return (
-    <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 px-4'>
+    <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 px-4 mb-10'>
       {propriedades?.map((p) => {
         return (
           <Card key={p.id} className='bg-primary-foreground'>

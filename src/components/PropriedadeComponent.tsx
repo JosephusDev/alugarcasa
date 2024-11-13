@@ -150,7 +150,7 @@ export function PropriedadeComponent() {
       : propriedades
 
   return (
-    <div className='gap-4 px-4 w-full'>
+    <div className='gap-4 px-4 w-full mt-14'>
       <div className='my-5'>
         <h1 className='text-xl sm:text-3xl font-bold'>
           Gerencie suas propriedades

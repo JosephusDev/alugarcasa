@@ -5,8 +5,8 @@ import { Input } from "./ui/input";
 export function InputSearch(){
     return (
         <>
-            <div className="w-full justify-center items-center text-center">
-                <h1 className="text-2xl px-4">Pesquisa</h1>
+            <div className="w-full justify-center items-center text-center my-10">
+                <h1 className="text-2xl font-bold px-4">Pesquisa</h1>
                 <div className="w-[80%] md:w-[60%] sm:w-[40%] p-4 relative mx-auto">
                         <Input
                             id="search"

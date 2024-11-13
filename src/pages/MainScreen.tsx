@@ -16,14 +16,16 @@ export default function MainScreen() {
         <>
           <AppSidebar />
           <main className='w-full'>
-            <Button
-              className='m-1'
-              size={'icon'}
-              onClick={toggleSidebar}
-              variant={'ghost'}
-            >
-              <Menu size={15} />
-            </Button>
+            <div className='flex items-center w-full h-10 bg-primary-foreground opacity-90 fixed z-10'>
+              <Button
+                className='m-1'
+                size={'icon'}
+                onClick={toggleSidebar}
+                variant={'ghost'}
+              >
+                <Menu size={15} />
+              </Button>
+            </div>
             <Rotas />
           </main>
         </>
