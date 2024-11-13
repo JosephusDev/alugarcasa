@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { CardSection } from "./CardSection";
-import { CarouselComponent } from "./CarouselComponent";
-import { FooterComponet } from "./FooterComponent";
-import { InputSearch } from "./InputSearch";
-import Api from "@/api";
+import { useEffect, useState } from 'react'
+import { CardSection } from './CardSection'
+import { CarouselComponent } from './CarouselComponent'
+import { FooterComponet } from './FooterComponent'
+import { InputSearch } from './InputSearch'
+import Api from '@/api'
 
 interface IPropriedades {
   id: number
@@ -23,8 +23,7 @@ export function HomeComponent() {
       const token = localStorage.getItem('token')
       await Api.get('/propriedade', {
         headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response)=>{
+      }).then((response) => {
         setPropriedades(response.data)
       })
     }
@@ -32,9 +31,9 @@ export function HomeComponent() {
   }, [])
   return (
     <>
-      <CarouselComponent/>
+      <CarouselComponent />
       <InputSearch />
-      <CardSection propriedades={propriedades}/>
+      <CardSection propriedades={propriedades} />
       <FooterComponet />
     </>
   )
