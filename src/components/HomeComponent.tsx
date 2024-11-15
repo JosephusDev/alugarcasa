@@ -32,7 +32,6 @@ export function HomeComponent() {
   return (
     <>
       <CarouselComponent />
-      <InputSearch />
       <CardSection propriedades={propriedades} />
       <FooterComponet />
     </>
