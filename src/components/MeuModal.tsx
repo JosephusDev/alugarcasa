@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Loader2 } from 'lucide-react'
 import React from 'react'
 
 interface ModalProps {
@@ -16,6 +17,7 @@ interface ModalProps {
   trigger: React.ReactNode
   onClick?: () => void
   visibleFooter?: boolean
+  isLoading?: boolean
   typeButton?: 'default' | 'destructive'
 }
 
@@ -27,6 +29,7 @@ export function MeuModal({
   trigger,
   visibleFooter = true,
   typeButton = 'default',
+  isLoading = false,
 }: ModalProps) {
   return (
     <Dialog>
@@ -38,8 +41,17 @@ export function MeuModal({
         <div className='grid gap-4 py-4'>{children}</div>
         {visibleFooter && (
           <DialogFooter>
-            <Button onClick={onClick} type='submit' variant={typeButton}>
-              {buttonTitle}
+            <Button
+              onClick={onClick}
+              type='submit'
+              variant={typeButton}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className='h-4 w-4 animate-spin' />
+              ) : (
+                buttonTitle
+              )}
             </Button>
           </DialogFooter>
         )}

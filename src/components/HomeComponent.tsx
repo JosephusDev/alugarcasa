@@ -30,16 +30,19 @@ export function HomeComponent() {
     }
     getPropriedades()
   }, [])
-  
- 
+
   const filteredPropriedades =
     pesquisarPropriedade && propriedades.length > 0
       ? propriedades?.filter(
           (p) =>
-            p.descricao.toLowerCase().includes(pesquisarPropriedade.toLowerCase()) ||
-            p.bairro.toLowerCase().includes(pesquisarPropriedade.toLowerCase()) ||
-            p.preco.includes(pesquisarPropriedade) || 
-            p.cidade.toLowerCase().includes(pesquisarPropriedade.toLowerCase())
+            p.descricao
+              .toLowerCase()
+              .includes(pesquisarPropriedade.toLowerCase()) ||
+            p.bairro
+              .toLowerCase()
+              .includes(pesquisarPropriedade.toLowerCase()) ||
+            p.preco.includes(pesquisarPropriedade) ||
+            p.cidade.toLowerCase().includes(pesquisarPropriedade.toLowerCase()),
         )
       : propriedades
   return (

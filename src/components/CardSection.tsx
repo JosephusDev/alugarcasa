@@ -21,10 +21,8 @@ interface CardSectionProps {
 
 //pesquisarPropriedade
 export function CardSection({ propriedades }: CardSectionProps) {
-  
   return (
     <div className='px-4 mb-10'>
-      
       {/* Renderização dos Cards Filtrados */}
       <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4'>
         {propriedades.length > 0 ? (
@@ -66,7 +64,9 @@ export function CardSection({ propriedades }: CardSectionProps) {
             </Card>
           ))
         ) : (
-          <p className='text-center col-span-3'>Nenhuma propriedade encontrada.</p>
+          <p className='text-center col-span-3'>
+            Nenhuma propriedade encontrada.
+          </p>
         )}
       </div>
     </div>

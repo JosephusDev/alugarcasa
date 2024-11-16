@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Api from '@/api'
 import {
   Table,
@@ -16,6 +16,7 @@ import {
   Image,
   PlusCircle,
   Trash,
+  Loader2,
 } from 'lucide-react'
 import { Label } from './ui/label'
 import { Textarea } from './ui/textarea'
@@ -41,8 +42,10 @@ export function PropriedadeComponent() {
   const [cidade, setCidade] = useState('')
   const [bairro, setBairro] = useState('')
   const [preco, setPreco] = useState('')
-  const [imagem, setImagem] = useState('')
+  const [imagem, setImagem] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
+  const fileInputRef = useRef<HTMLInputElement>(null)
   // Função para buscar os dados
   const getPropriedades = async () => {
     const id = localStorage.getItem('id')
@@ -64,20 +67,30 @@ export function PropriedadeComponent() {
     setCidade('')
     setBairro('')
     setPreco('')
-    setImagem('')
+    setImagem(null)
   }
 
   const cadastrarPropriedade = async () => {
+    setIsLoading(true)
     if (descricao && cidade && bairro && preco && imagem) {
       const id_usuario = localStorage.getItem('id')
       const token = localStorage.getItem('token')
-      await Api.post(
-        `/propriedade`,
-        { descricao, cidade, bairro, preco, imagem, id_usuario },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+      const formData = new FormData()
+      formData.append('descricao', descricao)
+      formData.append('cidade', cidade)
+      formData.append('bairro', bairro)
+      formData.append('preco', preco)
+      if (imagem) {
+        formData.append('imagem', imagem)
+      }
+      formData.append('id_usuario', id_usuario)
+
+      await Api.post(`/propriedade`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
-      )
+      })
         .then((response) => {
           getPropriedades()
           toast({
@@ -96,7 +109,10 @@ export function PropriedadeComponent() {
             variant: 'destructive',
           })
         })
-        .finally(() => limparCampos())
+        .finally(() => {
+          limparCampos()
+          setIsLoading(false)
+        })
     } else {
       toast({
         description: (
@@ -110,9 +126,11 @@ export function PropriedadeComponent() {
     }
   }
 
-  const deletePropriedade = async (id: number) => {
+  const deletePropriedade = async (id: number, fileName: string) => {
+    setIsLoading(true)
     const token = localStorage.getItem('token')
-    await Api.delete(`/propriedade/${id}`, {
+    const newFileName = fileName.split('/').at(-1)
+    await Api.delete(`/propriedade/${id}/${newFileName}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => {
@@ -134,6 +152,7 @@ export function PropriedadeComponent() {
           description: 'Erro ao excluir propriedade',
         })
       })
+      .finally(() => setIsLoading(false))
   }
 
   useEffect(() => {
@@ -174,6 +193,7 @@ export function PropriedadeComponent() {
                 <span className='hidden sm:flex'>Adicionar</span>
               </Button>
             }
+            isLoading={isLoading}
             children={
               <>
                 <div className='grid grid-rows-1 gap-1'>
@@ -216,9 +236,14 @@ export function PropriedadeComponent() {
                 <div className='grid grid-rows-1 gap-1'>
                   <Label htmlFor='imagem'>Imagem</Label>
                   <Input
-                    onChange={(e) => setImagem(e.target.value)}
+                    type='file'
+                    ref={fileInputRef}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        setImagem(e.target.files[0])
+                      }
+                    }}
                     id='imagem'
-                    value={imagem}
                     className='col-span-3'
                   />
                 </div>
@@ -285,7 +310,8 @@ export function PropriedadeComponent() {
                         </Button>
                       }
                       buttonTitle='Confirmar'
-                      onClick={() => deletePropriedade(prop.id)}
+                      onClick={() => deletePropriedade(prop.id, prop.imagem)}
+                      isLoading={isLoading}
                       visibleFooter={true}
                       children={
                         <p className='text-center text-lg'>
