@@ -10,13 +10,14 @@ interface IPropriedades {
   descricao: string
   cidade: string
   bairro: string
-  preco: number
+  preco: string
   contato: string
   imagem: string
 }
 
 export function HomeComponent() {
   const [propriedades, setPropriedades] = useState<IPropriedades[]>([])
+  const [pesquisarPropriedade, setpesquisarPropriedade] = useState('')
 
   useEffect(() => {
     const getPropriedades = async () => {
@@ -29,10 +30,23 @@ export function HomeComponent() {
     }
     getPropriedades()
   }, [])
+  
+ 
+  const filteredPropriedades =
+    pesquisarPropriedade && propriedades.length > 0
+      ? propriedades?.filter(
+          (p) =>
+            p.descricao.toLowerCase().includes(pesquisarPropriedade.toLowerCase()) ||
+            p.bairro.toLowerCase().includes(pesquisarPropriedade.toLowerCase()) ||
+            p.preco.includes(pesquisarPropriedade) || 
+            p.cidade.toLowerCase().includes(pesquisarPropriedade.toLowerCase())
+        )
+      : propriedades
   return (
     <>
       <CarouselComponent />
-      <CardSection propriedades={propriedades} />
+      <InputSearch onSearchChange={setpesquisarPropriedade} />
+      <CardSection propriedades={filteredPropriedades} />
       <FooterComponet />
     </>
   )

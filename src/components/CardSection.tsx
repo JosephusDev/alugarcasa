@@ -10,7 +10,7 @@ interface ICardProps {
   descricao: string
   cidade: string
   bairro: string
-  preco: number
+  preco: string
   contato: string
   imagem: string
 }
@@ -21,40 +21,14 @@ interface CardSectionProps {
 
 //pesquisarPropriedade
 export function CardSection({ propriedades }: CardSectionProps) {
-  const [pesquisarPropriedade, setpesquisarPropriedade] = useState('')
-
-  // Função para converter a string de preço para número
-  const parsePreco = (preco: string): number => {
-    const parsed = parseFloat(preco.replace(/\D/g, ''))
-    return isNaN(parsed) ? 0 : parsed
-  }
-
-  // Função de filtragem
-  const propriedadesFiltradas = propriedades.filter((p) => {
-    const consulta = pesquisarPropriedade.toLowerCase()
-
-    // Verificar se o input é um número para buscar por preço
-    const isSearchingByPreco = !isNaN(parsePreco(pesquisarPropriedade))
-
-    const descricaoResultado = p.descricao.toLowerCase().includes(consulta)
-    const bairroResultado = p.bairro.toLowerCase().includes(consulta)
-    const precoResultado = isSearchingByPreco
-      ? p.preco <= parsePreco(pesquisarPropriedade)
-      : true
-
-    // Buscar por descrição, bairro ou preço máximo
-    return descricaoResultado || bairroResultado || precoResultado
-  })
-
+  
   return (
     <div className='px-4 mb-10'>
-      {/* Input de Pesquisa */}
-      <InputSearch onSearchChange={setpesquisarPropriedade} />
-
+      
       {/* Renderização dos Cards Filtrados */}
       <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4'>
-        {propriedadesFiltradas.length > 0 ? (
-          propriedadesFiltradas.map((p) => (
+        {propriedades.length > 0 ? (
+          propriedades.map((p) => (
             <Card key={p.id} className='bg-primary-foreground'>
               <CardContent className='px-0'>
                 <MeuModal
