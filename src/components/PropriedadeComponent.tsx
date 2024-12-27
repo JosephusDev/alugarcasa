@@ -16,7 +16,6 @@ import {
   Image,
   PlusCircle,
   Trash,
-  Loader2,
 } from 'lucide-react'
 import { Label } from './ui/label'
 import { Textarea } from './ui/textarea'
@@ -73,7 +72,7 @@ export function PropriedadeComponent() {
   const cadastrarPropriedade = async () => {
     setIsLoading(true)
     if (descricao && cidade && bairro && preco && imagem) {
-      const id_usuario = localStorage.getItem('id')
+      const id_usuario = localStorage.getItem('id') || ""
       const token = localStorage.getItem('token')
       const formData = new FormData()
       formData.append('descricao', descricao)

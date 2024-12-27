@@ -2,9 +2,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { formatar } from '@/functions/formatarMoeda'
 import { DollarSign, MapPin, PhoneCall, Tags } from 'lucide-react'
 import { MeuModal } from './MeuModal'
-import { useState } from 'react'
-import { InputSearch } from './InputSearch'
-
 interface ICardProps {
   id: number
   descricao: string
@@ -48,7 +45,7 @@ export function CardSection({ propriedades }: CardSectionProps) {
                 </div>
                 <div className='flex gap-2 px-5'>
                   <DollarSign className='mt-1' color='#9956f6' size={18} />
-                  <p>{formatar(p.preco)}</p>
+                  <p>{formatar(Number(p.preco))}</p>
                 </div>
                 <div className='flex gap-2 px-5'>
                   <MapPin className='mt-1' color='#9956f6' size={18} />

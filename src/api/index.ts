@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const urlBase = 'http://localhost:8800'
+const urlBase = 'https://alugarcasa-api.vercel.app'
 
 const Api = axios.create({
   baseURL: urlBase,
